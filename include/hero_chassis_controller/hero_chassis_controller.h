@@ -2,8 +2,8 @@
 // Created by chuan on 2026/11/8.
 //
 
-#ifndef SIMPLE_CHASSIS_CONTROLLER_SIMPLE_CHASSIS_CONTROLLER_H
-#define SIMPLE_CHASSIS_CONTROLLER_SIMPLE_CHASSIS_CONTROLLER_H
+#ifndef HERO_CHASSIS_CONTROLLER_HERO_CHASSIS_CONTROLLER_H
+#define HERO_CHASSIS_CONTROLLER_HERO_CHASSIS_CONTROLLER_H
 
 #include <control_toolbox/pid.h>
 #include <controller_interface/controller.h>
@@ -36,4 +36,4 @@ namespace hero_chassis_controller {
 
 }  // namespace hero_chassis_controller
 
-#endif //SIMPLE_CHASSIS_CONTROLLER_SIMPLE_CHASSIS_CONTROLLER_H
+#endif //HERO_CHASSIS_CONTROLLER_HERO_CHASSIS_CONTROLLER_H
