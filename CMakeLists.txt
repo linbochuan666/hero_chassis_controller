@@ -78,4 +78,4 @@ install(
 ## Static code analysis ##
 ##########################
 
-roslint_cpp()
+roslint_cpp(src/hero_chassis_controller.cpp)
