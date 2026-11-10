@@ -1,4 +1,4 @@
-// Copyright 2026 Bochuan Lin
+// Copyright 2026 Lin Bochuan
 // Created by chuan on 2026/11/8.
 //
 
@@ -22,17 +22,22 @@ public:
     void update(const ros::Time& time, const ros::Duration& period) override;
 
 private:
-        // 四个轮子：控制权的入口
-        hardware_interface::JointHandle front_left_joint_;
-        hardware_interface::JointHandle front_right_joint_;
-        hardware_interface::JointHandle back_left_joint_;
-        hardware_interface::JointHandle back_right_joint_;
 
-        // 四个独立的 PID：每个轮子一个
-        control_toolbox::Pid front_left_pid_;
-        control_toolbox::Pid front_right_pid_;
-        control_toolbox::Pid back_left_pid_;
-        control_toolbox::Pid back_right_pid_;
+    // 四个轮子：控制权的入口
+    hardware_interface::JointHandle front_left_joint_;
+    hardware_interface::JointHandle front_right_joint_;
+    hardware_interface::JointHandle back_left_joint_;
+    hardware_interface::JointHandle back_right_joint_;
+
+    // 四个独立的 PID：每个轮子一个
+    control_toolbox::Pid front_left_pid_;
+    control_toolbox::Pid front_right_pid_;
+    control_toolbox::Pid back_left_pid_;
+    control_toolbox::Pid back_right_pid_;
+
+    // 测试用的目标转速与切换时刻
+    double target_velocity_{0.0};
+    ros::Time last_switch_;
 };
 
 }  // namespace hero_chassis_controller
