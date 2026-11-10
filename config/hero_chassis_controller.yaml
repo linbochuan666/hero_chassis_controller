@@ -1,1 +1,37 @@
-subscriber_topic: /temperature
+controller:
+  hero_chassis_controller:
+    type: hero_chassis_controller/HeroChassisController
+
+    front_left_wheel:
+      p: 2.0
+      i: 0.0
+      d: 0.0
+      #i_clamp:10.0   不能用这个，因为装的版本没有
+      i_clamp_max: 1.0
+      i_clamp_min: -1.0
+
+    front_right_wheel:
+      p: 2.0
+      i: 0.0
+      d: 0.0
+      #i_clamp:10.0
+      i_clamp_max: 1.0
+      i_clamp_min: -1.0
+
+    back_left_wheel:
+      p: 2.0
+      i: 0.0
+      d: 0.0
+      i_clamp_max: 1.0
+      i_clamp_min: -1.0
+
+    back_right_wheel:
+      p: 2.0
+      i: 0.0
+      d: 0.0
+      i_clamp_max: 1.0
+      i_clamp_min: -1.0
+
+  joint_state_controller:           # 广播器，发布机器人所有关节的当前状态
+    type: joint_state_controller/JointStateController
+    publish_rate: 50                # 每秒发布50次关节状态
