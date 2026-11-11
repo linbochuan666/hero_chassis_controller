@@ -2,6 +2,12 @@ controller:
   hero_chassis_controller:
     type: hero_chassis_controller/HeroChassisController
 
+    #test_mode: true
+
+    wheel_radius: 0.07625
+    wheel_base: 0.4           #从URDF里面来
+    wheel_track: 0.4
+
     front_left_wheel:
       p: 2.0
       i: 0.2

@@ -16,6 +16,7 @@ find_package(catkin REQUIRED
         hardware_interface
         pluginlib
         control_toolbox
+        realtime_tools
 )
 
 catkin_package(
@@ -30,6 +31,7 @@ catkin_package(
         hardware_interface
         pluginlib
         control_toolbox
+        realtime_tools
         DEPENDS
 )
 

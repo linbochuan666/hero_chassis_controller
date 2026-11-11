@@ -8,6 +8,8 @@
 #include <control_toolbox/pid.h>
 #include <controller_interface/controller.h>
 #include <hardware_interface/joint_command_interface.h>
+#include <geometry_msgs/Twist.h>
+#include <realtime_tools/realtime_buffer.h>
 
 namespace hero_chassis_controller
 {
@@ -23,6 +25,8 @@ public:
 
 private:
 
+    //bool test_mode_{true};
+
     // 四个轮子：控制权的入口
     hardware_interface::JointHandle front_left_joint_;
     hardware_interface::JointHandle front_right_joint_;
@@ -35,9 +39,20 @@ private:
     control_toolbox::Pid back_left_pid_;
     control_toolbox::Pid back_right_pid_;
 
-    // 测试用的目标转速与切换时刻
-    double target_velocity_{0.0};
-    ros::Time last_switch_;
+    // 测试用的目标转速与切换时刻（方波）
+    // double target_velocity_{0.0};
+    // ros::Time last_switch_;
+
+    // 速度指令接收存储
+    ros::Subscriber cmd_vel_sub_;
+    realtime_tools::RealtimeBuffer<geometry_msgs::Twist> cmd_vel_buffer_;
+
+    // 几何参数
+    double wheel_radius_{0.07625};
+    double wheel_base_{0.4};
+    double wheel_track_{0.4};
+
+    void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg);
 };
 
 }  // namespace hero_chassis_controller
