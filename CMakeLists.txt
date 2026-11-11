@@ -17,6 +17,8 @@ find_package(catkin REQUIRED
         pluginlib
         control_toolbox
         realtime_tools
+        nav_msgs
+        tf
 )
 
 catkin_package(
@@ -26,6 +28,8 @@ catkin_package(
         ${PROJECT_NAME}
         CATKIN_DEPENDS
         roscpp
+        nav_msgs
+        tf
         # roslint
         controller_interface
         hardware_interface
