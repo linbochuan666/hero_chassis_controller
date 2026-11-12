@@ -12,6 +12,7 @@
 #include <realtime_tools/realtime_buffer.h>
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
 
 namespace hero_chassis_controller
 {
@@ -60,6 +61,9 @@ private:
     double y_{0.0};
     double th{0.0};
     int odom_publish_count_{0};
+
+    tf::TransformListener tf_listener_;
+    bool world_frame_mode_{false};
 };
 
 }  // namespace hero_chassis_controller

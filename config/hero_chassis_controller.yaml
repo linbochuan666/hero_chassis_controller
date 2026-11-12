@@ -3,6 +3,7 @@ controller:
     type: hero_chassis_controller/HeroChassisController
 
     #test_mode: true
+    world_frame_mode: false     # false=底盘坐标系(选做5)  true=世界坐标系(选做7)
 
     wheel_radius: 0.07625
     wheel_base: 0.4           #从URDF里面来

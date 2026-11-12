@@ -34,6 +34,8 @@ namespace hero_chassis_controller
 
         odom_pub_ = controller_nh.advertise<nav_msgs::Odometry>("/odom", 1);
 
+        controller_nh.param("world_frame_mode", world_frame_mode_, false);
+
         return true;
     }
 
@@ -82,15 +84,44 @@ namespace hero_chassis_controller
         const double half = (wheel_base_ + wheel_track_) / 2.0;
         const double r    = wheel_radius_;
 
+
+        double vx = cmd.linear.x;
+        double vy = cmd.linear.y;
+        const double wz = cmd.angular.z;
+
+
+        if (world_frame_mode_)
+        {
+            geometry_msgs::Vector3Stamped v_in;
+            v_in.header.stamp    = ros::Time(0);   
+            v_in.header.frame_id = "odom";
+            v_in.vector.x = cmd.linear.x;
+            v_in.vector.y = cmd.linear.y;
+            v_in.vector.z = 0.0;
+
+            geometry_msgs::Vector3Stamped v_out;
+
+            try
+            {
+                tf_listener_.transformVector("base_link", v_in, v_out);
+                vx = v_out.vector.x;
+                vy = v_out.vector.y;
+            }
+            catch (const tf::TransformException& ex)
+            {
+                ROS_WARN_THROTTLE(1.0, "tf 变换失败: %s", ex.what());
+            }
+        }
+
         //逆运动学：底盘速度 变为 四个轮子的目标转速
         //四个轮子的目标转速、符号由轮子倾角决定：
         // 对角两轮同号，相邻两轮反向，与 simple_chassis_controller 的力矩表一致
-        const double omega_fl = (cmd.linear.x - cmd.linear.y - half * cmd.angular.z) / r;
-        const double omega_fr = (cmd.linear.x + cmd.linear.y + half * cmd.angular.z) / r;
-        const double omega_bl = (cmd.linear.x + cmd.linear.y - half * cmd.angular.z) / r;
-        const double omega_br = (cmd.linear.x - cmd.linear.y + half * cmd.angular.z) / r;
+        const double omega_fl = (vx - vy - half * wz) / r;
+        const double omega_fr = (vx + vy + half * wz) / r;
+        const double omega_bl = (vx + vy - half * wz) / r;
+        const double omega_br = (vx - vy + half * wz) / r;
 
-        //四路 PID
+        //PID
         front_left_joint_.setCommand(
             front_left_pid_.computeCommand(omega_fl - front_left_joint_.getVelocity(), period));
         front_right_joint_.setCommand(
@@ -116,7 +147,7 @@ namespace hero_chassis_controller
         th += car_wz * period.toSec();
 
 
-        //发布（降频到 1/10）
+        //发布（降频）
         if (++odom_publish_count_ % 10 == 0)
         {
             nav_msgs::Odometry odom;
@@ -135,11 +166,12 @@ namespace hero_chassis_controller
 
             odom_pub_.publish(odom);
 
+            // "odom" 到 "base_link"
             geometry_msgs::TransformStamped tf_msg;
             tf_msg.header.stamp = time;
             tf_msg.header.frame_id = "odom";
             tf_msg.child_frame_id  = "base_link";
-            
+
             tf_msg.transform.translation.x = x_;
             tf_msg.transform.translation.y = y_;
             tf_msg.transform.translation.z = 0.0;
